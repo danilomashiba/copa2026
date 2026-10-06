@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Projeto Copa 2026
+dados/
+*.csv
+*.parquet
+kaggle.json
