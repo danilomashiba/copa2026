@@ -38,9 +38,35 @@ A licença MIT permite usar, copiar, modificar e distribuir o dataset, desde que
 | Código e scripts | `kaggle.json`, senhas e tokens |
 | Gráficos finais pequenos | Arquivos temporários ou desnecessários para reproduzir o projeto |
 
-## Parte 1: Primeiro contato
+## Parte 1 — Primeiro contato e sanidade dos dados
 
-_(a preencher)_
+### T1.1 — Dimensão, memória e otimização
+
+O dataset possui **54.600 linhas e 75 colunas**, ocupando aproximadamente **67,28 MB** em memória quando medido com `deep=True`.
+
+A maior parte das colunas numéricas estava originalmente em `int64` ou `float64`, enquanto variáveis textuais estavam como `object`.
+
+Para reduzir o consumo de memória sem alterar a estrutura do dataset:
+
+- colunas categóricas foram convertidas para `category`;
+- `match_date` foi convertida para `datetime`;
+- colunas numéricas foram reduzidas para tipos menores compatíveis com seus valores.
+
+Após a otimização, o uso de memória caiu para aproximadamente **13,15 MB**, uma redução de cerca de **80,5%**, mantendo as mesmas **54.600 linhas e 75 colunas**.
+
+### T1.2 — Mapa de qualidade
+
+O mapa de qualidade mostrou **75 colunas sem valores nulos e sem variáveis constantes**.
+
+Considerando apenas a consistência interna dos dados, as três colunas mais suspeitas são:
+
+- **`total_minutes_tournament`** — apresenta múltiplos valores para o mesmo jogador e reduções entre registros, não se comportando claramente como total final ou acumulado.
+- **`total_goals_tournament`** — apresenta o mesmo comportamento, com valores que podem diminuir ao longo dos registros de um jogador.
+- **`total_assists_tournament`** — também varia e apresenta reduções, dificultando sua interpretação como métrica acumulada do torneio.
+
+A análise mostrou ainda que o mesmo jogador pode aparecer em múltiplas partidas na mesma data, sem uma variável que permita identificar diferentes cenários ou simulações. Isso impede validar com segurança a trajetória das métricas `total_*_tournament`.
+
+> **Observação sobre a natureza dos dados:** o próprio Kaggle informa que o dataset foi **gerado sinteticamente e pode não refletir dados reais**. A análise confirmou esse afastamento em pontos relevantes: o dataset possui **1.050 partidas**, contra **104 partidas da Copa do Mundo de 2026**; todos os **1.248 jogadores** aparecem em múltiplas partidas na mesma data em algum momento, chegando a **5 partidas no mesmo dia**; e as métricas agregadas de torneio não permitem reconstruir de forma consistente uma trajetória única por jogador. Portanto, essas diferenças devem ser interpretadas considerando a natureza simulada da base, e não como erros de coleta de dados reais.
 
 ## Parte 2: Transformação e métricas
 
