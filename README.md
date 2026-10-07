@@ -1,5 +1,6 @@
 # Análise de Performance: Copa do Mundo 2026
 > Desafio hands-on com dataset Copa do Mundo 2026.
+> Candidato: Danilo Hissamo Mashiba Costa
 
 ## Parte 0: Download e preparação
 
