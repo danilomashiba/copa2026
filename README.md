@@ -102,8 +102,7 @@ Foram testadas as seguintes regras:
 - `total_minutes_tournament <= partidas * 90`
 - estatísticas de goleiro apenas para jogadores da posição `Goalkeeper`
 - idade, altura e peso dentro de faixas plausíveis
-
-Nenhuma violação foi encontrada nas regras avaliadas.
+- jogadores com `minutes_played = 0` não deveriam registrar assistências
 
 | Regra | Violações |
 |---|---:|
@@ -112,8 +111,11 @@ Nenhuma violação foi encontrada nas regras avaliadas.
 | `total_minutes_tournament <= partidas * 90` | 0 |
 | Estatísticas de goleiro apenas para goleiros | 0 |
 | Idade, altura e peso plausíveis | 0 |
+| Assistências com `minutes_played = 0` | 30 |
 
-Apesar dos problemas de granularidade identificados na T1.2, as regras básicas de coerência entre variáveis apresentaram comportamento consistente.
+Foi identificada uma inconsistência interna: **30 registros possuem assistências atribuídas a jogadores com zero minutos em campo**.
+
+As demais regras básicas de coerência avaliadas não apresentaram violações.
 
 ## Parte 2: Transformação e métricas
 
