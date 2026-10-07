@@ -134,9 +134,7 @@ Os resultados foram conferidos manualmente em registros de exemplo e apresentara
 
 O ranking bruto por registro apresentou valores extremos causados por baixa amostra, como **1 gol em 5 minutos = 18 gols/90**.
 
-Para tornar o ranking mais representativo, os dados foram agregados por jogador antes do cálculo de `goals_per90`, utilizando o total de gols e minutos de cada atleta.
-
-Também foi aplicado um corte mínimo de **180 minutos**. O corte não alterou o Top 10 final, pois os jogadores líderes já possuíam volume de minutos suficiente.
+Para tornar a comparação mais representativa, os dados foram primeiro agregados por jogador, somando gols e minutos jogados. Em seguida, foi calculada a taxa de gols por 90 minutos sobre o total acumulado de cada atleta.
 
 | Posição | Jogador | Seleção | Gols | Minutos | Gols/90 |
 |---:|---|---|---:|---:|---:|
@@ -151,11 +149,11 @@ Também foi aplicado um corte mínimo de **180 minutos**. O corte não alterou o
 | 9 | Andre Bassogog | Cameroon | 13 | 1.634 | 0,716 |
 | 10 | Kasey Hector | Jamaica | 16 | 2.091 | 0,689 |
 
-A principal conclusão é que métricas por 90 minutos precisam ser acompanhadas de um volume mínimo de participação para evitar rankings distorcidos por poucos minutos em campo.
+A principal conclusão é que métricas por 90 minutos devem ser acompanhadas de um volume mínimo de participação para evitar rankings distorcidos por poucos minutos em campo.
 
 ### T2.3 — Agregado por seleção
 
-Foram agregados por seleção:
+Foram considerados apenas registros com `minutes_played > 0` e agregadas por seleção as seguintes métricas:
 
 - soma de gols;
 - soma de assistências;
@@ -164,20 +162,20 @@ Foram agregados por seleção:
 
 | Seleção | Gols | Assistências | Rating médio | Distância total (km) |
 |---|---:|---:|---:|---:|
-| Qatar | 95 | 93 | 3,66 | 6.872,3 |
-| Netherlands | 94 | 85 | 3,71 | 5.614,0 |
-| Panama | 90 | 81 | 3,71 | 4.969,6 |
-| Cameroon | 88 | 66 | 3,71 | 4.602,4 |
-| Saudi Arabia | 82 | 68 | 3,63 | 5.431,9 |
-| Jamaica | 79 | 80 | 3,66 | 6.117,3 |
-| Tunisia | 78 | 48 | 3,62 | 4.921,1 |
-| Costa Rica | 76 | 61 | 3,60 | 4.708,9 |
-| Ghana | 75 | 65 | 3,70 | 4.722,4 |
-| Iran | 72 | 70 | 3,70 | 3.954,2 |
+| Qatar | 95 | 93 | 6,29 | 6.872,3 |
+| Netherlands | 94 | 82 | 6,46 | 5.614,0 |
+| Panama | 90 | 81 | 6,36 | 4.969,6 |
+| Cameroon | 88 | 65 | 6,40 | 4.602,4 |
+| Saudi Arabia | 82 | 67 | 6,29 | 5.431,9 |
+| Jamaica | 79 | 79 | 6,31 | 6.117,3 |
+| Tunisia | 78 | 48 | 6,18 | 4.921,1 |
+| Costa Rica | 76 | 60 | 6,25 | 4.708,9 |
+| Ghana | 75 | 64 | 6,39 | 4.722,4 |
+| Iran | 72 | 70 | 6,41 | 3.954,2 |
 
-Os volumes de gols, assistências e distância são elevados, reflexo da estrutura sintética e da quantidade de partidas presentes no dataset.
+Os volumes de gols, assistências e distância continuam elevados, coerentes com a natureza sintética e a quantidade de partidas presentes no dataset.
 
-Também chama atenção a baixa variação do `player_rating` médio entre seleções, que ficou entre aproximadamente **3,52 e 3,76**, mesmo com diferenças relevantes nas demais métricas.
+O `player_rating` médio entre seleções apresentou baixa variação, ficando entre aproximadamente **6,15 e 6,46**.
 
 ### T2.4 — Goals vs xG
 
@@ -323,21 +321,31 @@ O arquivo gerado foi: https://danilomashiba.github.io/copa2026/ranking_interativ
 
 ### T4.1 — 5 jogadores mais subvalorizados
 
-Foi definida uma métrica simples de impacto ofensivo:
+Para identificar jogadores com alto impacto ofensivo e baixo `player_rating`, foram considerados apenas atletas com pelo menos **90 minutos**.
 
-`impacto = goals + assists + key_passes`
+O impacto ofensivo foi calculado a partir de:
 
-Foram considerados apenas jogadores com pelo menos **180 minutos** e com `player_rating` abaixo da mediana do grupo (**3,71**).
+- gols por 90 minutos;
+- assistências por 90 minutos;
+- key passes por 90 minutos.
 
-| Jogador | Seleção | Gols | Assistências | Key Passes | Rating | Impacto |
-|---|---|---:|---:|---:|---:|---:|
-| Andre Ricketts | Jamaica | 4 | 6 | 51 | 3,63 | 61 |
-| Selim Saiss | Morocco | 1 | 1 | 56 | 3,62 | 58 |
-| Alvaro Llorente | Spain | 2 | 6 | 48 | 3,70 | 56 |
-| Nemanja Jevtovic | Serbia | 4 | 8 | 44 | 3,70 | 56 |
-| Damion Gray | Jamaica | 11 | 6 | 38 | 3,71 | 55 |
+As três métricas foram transformadas em **percentis**, colocando-as na mesma escala. O score de impacto representa a média desses percentis, variando de **0 a 100**.
 
-O resultado sugere jogadores com produção ofensiva relevante, mas com `player_rating` abaixo da mediana, o que pode indicar subavaliação pela métrica de rating.
+O `player_rating` foi calculado como média ponderada pelos minutos jogados. Foram considerados subvalorizados os jogadores com rating abaixo da mediana do grupo, aproximadamente **6,20**.
+
+| Jogador | Seleção | Gols | Assistências | Key Passes | Minutos | Rating | Impacto |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Rodri Mikel | Spain | 6 | 6 | 29 | 1.528 | 6,18 | 87,15 |
+| Michael Brown | Panama | 9 | 7 | 30 | 1.761 | 6,18 | 86,83 |
+| Edouard Ndiaye | Senegal | 5 | 6 | 59 | 2.051 | 6,14 | 86,19 |
+| Nicolas Anguissa | Cameroon | 8 | 4 | 27 | 1.527 | 6,01 | 83,76 |
+| Aleksandar Lukic | Serbia | 2 | 7 | 40 | 1.558 | 6,20 | 82,61 |
+
+**Rodri Mikel** apresentou o maior score de impacto entre os jogadores com rating abaixo da mediana, com **87,15 pontos de impacto** e rating médio de **6,18**.
+
+> **Validação do corte:** também foi testado um corte mínimo de **180 minutos**, e o Top 5 permaneceu exatamente igual, indicando estabilidade do ranking em relação a esse parâmetro.
+
+> **Limitação:** o score é uma construção analítica para este case e considera apenas gols, assistências e key passes. Ele não representa uma medida completa da contribuição de um jogador e pode deixar de capturar aspectos defensivos, função tática e contexto das partidas.
 
 ### T4.2 — Comunicação executiva
 
