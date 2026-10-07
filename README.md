@@ -356,8 +356,6 @@ O `player_rating` foi calculado como média ponderada pelos minutos jogados. For
 
 **Rodri Mikel** apresentou o maior score de impacto entre os jogadores com rating abaixo da mediana, com **87,15 pontos de impacto** e rating médio de **6,18**.
 
-> **Validação do corte:** também foi testado um corte mínimo de **180 minutos**, e o Top 5 permaneceu exatamente igual, indicando estabilidade do ranking em relação a esse parâmetro.
-
 > **Limitação:** o score é uma construção analítica para este case e considera apenas gols, assistências e key passes. Ele não representa uma medida completa da contribuição de um jogador e pode deixar de capturar aspectos defensivos, função tática e contexto das partidas.
 
 ### T4.2 — Comunicação executiva
