@@ -22,6 +22,10 @@ Foram realizadas as seguintes verificações de integridade e consistência:
 - **SHA-256:** `322c5efd933578a61ac6de612b4400011849efa7c6a1b88037be67f100fb4e99`, utilizado como identificação da versão analisada do arquivo.
 - **Inspeção visual:** `df.head()` apresentou os primeiros registros sem anomalias aparentes.
 
+### Stack utilizada: 
+
+Foi utilizado **Python com pandas** porque o volume do dataset é compatível com processamento em memória e a biblioteca permite realizar exploração, validação e transformação de forma direta. **Matplotlib** foi utilizado para as visualizações e **KaggleHub** para tornar o download reproduzível.
+
 ### Onde as credenciais (`kaggle.json`) não devem ser guardadas — e por quê?
 
 Não devem ser guardadas no repositório Git, em células do notebook, em prints de tela ou em pastas compartilhadas, pois as chaves podem expor a conta do Kaggle a acessos não autorizados. Em repositórios Git, mesmo que o arquivo seja removido em um commit posterior, a chave pode permanecer registrada no histórico. Em caso de vazamento, é necessário revogar o token no Kaggle e gerar um novo.
@@ -248,17 +252,18 @@ Duas vantagens do Parquet neste projeto:
 
 ### T3.1 — Scatter xG × Goals
 
-Foi criado um gráfico de dispersão entre `expected_goals_xg` e `goals`, com a linha `y = x` como referência.
+Foi criado um gráfico de dispersão entre `expected_goals_xg` e `goals`, utilizando a linha `y = x` como referência.
 
-Os principais outliers destacados foram:
+Foram destacados os principais desvios nos dois sentidos:
 
 - **Memphis Zerrouki:** +20,78 gols acima do xG
 - **Kasey Hector:** +13,10
-- **Mohannad Majeed:** +12,87
+- **Granit Kobal:** -1,95
+- **Gavi Le Normand:** -1,88
 
 Jogadores acima da linha marcaram mais gols do que o esperado pelo xG; jogadores abaixo da linha marcaram menos.
 
-O gráfico reforça a forte assimetria positiva observada anteriormente nas métricas de `over_performance`.
+O gráfico evidencia uma forte assimetria positiva, com os maiores desvios concentrados acima da linha de referência.
 
 <img width="889" height="590" alt="image" src="https://github.com/user-attachments/assets/f215f48c-324f-4ca4-a884-c72fd295f895" />
 
@@ -355,15 +360,11 @@ O `player_rating` foi calculado como média ponderada pelos minutos jogados. For
 
 ### T4.2 — Comunicação executiva
 
-**Andre Ricketts se destaca como o jogador mais subvalorizado da análise, com impacto ofensivo de 61 pontos apesar de um rating médio de apenas 3,63.**
+**Rodri Mikel se destaca como o jogador de maior impacto ofensivo entre aqueles com rating abaixo da mediana, com score de impacto de 87,15 e rating médio de 6,18.**
 
-Número de suporte: **4 gols, 6 assistências e 51 key passes**.
+Número de suporte: **6 gols, 6 assistências e 29 key passes em 1.528 minutos**.
 
-Ressalva: a métrica de impacto é uma construção simples e não considera contexto de jogo, posição, dificuldade das ações ou qualidade dos adversários.
-
-## Limitações e o que não consegui validar
-
-- **Hipótese a validar:** 54.600 linhas parece incompatível com uma Copa real, considerando a quantidade esperada de jogadores e partidas. O dataset pode conter dados sintéticos ou registros em granularidade diferente da esperada. Essa hipótese será investigada na Parte 1.
+Ressalva: o score de impacto é uma métrica construída para esta análise e considera apenas produção ofensiva, não capturando integralmente contribuição defensiva, função tática ou contexto das partidas.
 
 ### T4.3 — Pensamento crítico
 
@@ -372,6 +373,15 @@ Uma correlação de **0,8 entre Sprints e Rating** não permite concluir que “
 Correlação indica associação, não causalidade. Jogadores com maior intensidade podem também atuar em posições específicas, jogar mais minutos ou participar mais de ações ofensivas, fatores que podem elevar simultaneamente o número de sprints e o rating.
 
 Para sustentar uma relação causal, seria necessário controlar essas variáveis e testar se o efeito permanece.
+
+
+## Limitações da análise
+
+O dataset é sintético e apresenta uma estrutura que não permite identificar diferentes cenários ou simulações. Por isso, não foi possível validar de forma confiável a trajetória das métricas `total_*_tournament`.
+
+Também foram identificados registros inconsistentes, como assistências atribuídas a jogadores com zero minutos em campo.
+
+Em um ambiente de produção, esses pontos seriam esclarecidos com a origem dos dados e as regras de geração antes da apresentação de conclusões de negócio.
 
 
 ## Créditos e licença
