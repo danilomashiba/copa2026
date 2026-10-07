@@ -72,20 +72,20 @@ A análise mostrou ainda que o mesmo jogador pode aparecer em múltiplas partida
 
 ### T1.3 — As 10 categorias
 
-Para demonstrar o entendimento das variáveis, foi selecionada uma coluna representativa de cada uma das 10 categorias do dataset.
+Para demonstrar o entendimento das variáveis, foi selecionada uma coluna representativa de cada um dos 10 grupos lógicos do dataset.
 
 | Categoria | Coluna | O que mede | Unidade |
 |---|---|---|---|
-| Identificação | `player_id` | Identificador único do jogador | Sem unidade |
-| Perfil | `age` | Idade do jogador | Anos |
+| Perfil do jogador | `age` | Idade do jogador | Anos |
 | Partida | `minutes_played` | Tempo jogado na partida | Minutos |
-| Ataque | `goals` | Gols marcados pelo jogador | Quantidade de gols |
+| Ataque | `goals` | Gols marcados pelo jogador | Quantidade |
 | Passe/Criação | `pass_accuracy` | Proporção de passes certos | Proporção de 0 a 1 |
 | Defesa | `tackles` | Desarmes realizados | Quantidade |
 | Disciplina | `yellow_cards` | Cartões amarelos recebidos | Quantidade |
 | Goleiro | `saves` | Defesas realizadas | Quantidade |
 | Físico | `distance_covered_km` | Distância percorrida | Quilômetros |
 | Performance | `player_rating` | Nota de desempenho do jogador | Pontuação de 0 a 10 |
+| Resumo do torneio | `total_goals_tournament` | Total de gols atribuído ao jogador no torneio | Quantidade |
 
 Os intervalos observados nos dados foram utilizados para validar as unidades e a interpretação das variáveis, como em `pass_accuracy`, que varia de **0,42 a 0,97** e, portanto, está armazenada como proporção.
 
@@ -121,14 +121,15 @@ Foram criadas as métricas:
 - `assists_per90`
 - `key_passes_per90`
 
-As métricas foram calculadas apenas para registros com `minutes_played > 0`, evitando divisão por zero.
+As métricas foram calculadas apenas para registros com `minutes_played > 0`.
 
-A validação confirmou:
+Nos registros com `minutes_played = 0`, as métricas por 90 minutos foram mantidas como `NaN`, pois não existe uma taxa por 90 definida para jogadores sem participação em campo.
 
-- **0 valores nulos**
-- **0 valores infinitos**
+A validação confirmou que:
 
-Os resultados foram conferidos manualmente em registros de exemplo e apresentaram cálculo consistente.
+- não existem valores infinitos;
+- todos os valores `NaN` ocorrem exclusivamente em registros com `minutes_played = 0`;
+- os cálculos foram conferidos manualmente em registros de exemplo e apresentaram resultados consistentes.
 
 ### T2.2 — Top 10 artilheiros por 90 minutos
 
@@ -225,19 +226,23 @@ O DataFrame tratado foi salvo em formato Parquet:
 
 `fifa_world_cup_2026_tratado.parquet`
 
-A validação confirmou que a estrutura foi preservada:
+A validação confirmou que a estrutura e os tipos das colunas foram preservados:
 
 - **DataFrame tratado:** 54.600 linhas × 78 colunas
 - **Arquivo Parquet:** 54.600 linhas × 78 colunas
 - **Estrutura preservada:** `True`
-- **Tamanho do Parquet:** 1,94 MB
+- **Tipos preservados:** `True`
 
-Comparado ao CSV original de aproximadamente **17,2 MB**, o arquivo Parquet ficou cerca de **89% menor**.
+Na comparação de tamanho, utilizando a mesma unidade de medida:
+
+- **CSV original:** 17,20 MB
+- **Parquet:** 2,04 MB
+- **Redução de tamanho:** 88,2%
 
 Duas vantagens do Parquet neste projeto:
 
-- **Menor armazenamento:** utiliza compressão eficiente, reduzindo significativamente o tamanho do arquivo.
-- **Leitura analítica mais eficiente:** o formato colunar permite carregar apenas as colunas necessárias em análises e consultas.
+- **Menor armazenamento:** o formato utiliza compressão eficiente e reduziu significativamente o tamanho do arquivo.
+- **Leitura analítica mais eficiente:** por ser colunar, permite carregar apenas as colunas necessárias em análises e consultas.
 
 ## Parte 3: Visualização
 
@@ -255,7 +260,8 @@ Jogadores acima da linha marcaram mais gols do que o esperado pelo xG; jogadores
 
 O gráfico reforça a forte assimetria positiva observada anteriormente nas métricas de `over_performance`.
 
-<img width="767" height="547" alt="image" src="https://github.com/user-attachments/assets/f39bce9d-1489-4bd2-9979-987a4e8f6410" />
+<img width="889" height="590" alt="image" src="https://github.com/user-attachments/assets/f215f48c-324f-4ca4-a884-c72fd295f895" />
+
 
 ### T3.2 — Player Rating por posição
 
