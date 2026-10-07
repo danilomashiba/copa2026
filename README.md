@@ -317,17 +317,48 @@ Também é possível selecionar rankings de **Top 5, Top 10 ou Top 20**.
 
 Os dados foram convertidos para **JSON** e incorporados diretamente no HTML. O gráfico de barras foi criado manualmente com **SVG e JavaScript**, atendendo ao requisito de uma página independente e sem dependências externas.
 
-O arquivo gerado foi:
-
-`ranking_interativo.html`
+O arquivo gerado foi: https://danilomashiba.github.io/copa2026/ranking_interativo.html
 
 ## Parte 4: Pergunta de negócio e comunicação
 
-_(a preencher)_
+### T4.1 — 5 jogadores mais subvalorizados
+
+Foi definida uma métrica simples de impacto ofensivo:
+
+`impacto = goals + assists + key_passes`
+
+Foram considerados apenas jogadores com pelo menos **180 minutos** e com `player_rating` abaixo da mediana do grupo (**3,71**).
+
+| Jogador | Seleção | Gols | Assistências | Key Passes | Rating | Impacto |
+|---|---|---:|---:|---:|---:|---:|
+| Andre Ricketts | Jamaica | 4 | 6 | 51 | 3,63 | 61 |
+| Selim Saiss | Morocco | 1 | 1 | 56 | 3,62 | 58 |
+| Alvaro Llorente | Spain | 2 | 6 | 48 | 3,70 | 56 |
+| Nemanja Jevtovic | Serbia | 4 | 8 | 44 | 3,70 | 56 |
+| Damion Gray | Jamaica | 11 | 6 | 38 | 3,71 | 55 |
+
+O resultado sugere jogadores com produção ofensiva relevante, mas com `player_rating` abaixo da mediana, o que pode indicar subavaliação pela métrica de rating.
+
+### T4.2 — Comunicação executiva
+
+**Andre Ricketts se destaca como o jogador mais subvalorizado da análise, com impacto ofensivo de 61 pontos apesar de um rating médio de apenas 3,63.**
+
+Número de suporte: **4 gols, 6 assistências e 51 key passes**.
+
+Ressalva: a métrica de impacto é uma construção simples e não considera contexto de jogo, posição, dificuldade das ações ou qualidade dos adversários.
 
 ## Limitações e o que não consegui validar
 
 - **Hipótese a validar:** 54.600 linhas parece incompatível com uma Copa real, considerando a quantidade esperada de jogadores e partidas. O dataset pode conter dados sintéticos ou registros em granularidade diferente da esperada. Essa hipótese será investigada na Parte 1.
+
+### T4.3 — Pensamento crítico
+
+Uma correlação de **0,8 entre Sprints e Rating** não permite concluir que “correr mais melhora a nota”.
+
+Correlação indica associação, não causalidade. Jogadores com maior intensidade podem também atuar em posições específicas, jogar mais minutos ou participar mais de ações ofensivas, fatores que podem elevar simultaneamente o número de sprints e o rating.
+
+Para sustentar uma relação causal, seria necessário controlar essas variáveis e testar se o efeito permanece.
+
 
 ## Créditos e licença
 
