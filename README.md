@@ -375,14 +375,15 @@ Correlação indica associação, não causalidade. Jogadores com maior intensid
 
 Para sustentar uma relação causal, seria necessário controlar essas variáveis e testar se o efeito permanece.
 
-
 ## Limitações da análise
 
 O dataset é sintético e apresenta uma estrutura que não permite identificar diferentes cenários ou simulações. Por isso, não foi possível validar de forma confiável a trajetória das métricas `total_*_tournament`.
 
 Também foram identificados registros inconsistentes, como assistências atribuídas a jogadores com zero minutos em campo.
 
-Em um ambiente de produção, esses pontos seriam esclarecidos com a origem dos dados e as regras de geração antes da apresentação de conclusões de negócio.
+A otimização de memória foi realizada em uma cópia do DataFrame para preservar os tipos originais durante as análises. Em uma pipeline de produção, após validar que as conversões de tipo não alteram os resultados de forma relevante, a versão otimizada poderia ser utilizada nas etapas seguintes.
+
+Em um ambiente de produção, esses pontos seriam esclarecidos com a origem dos dados, as regras de geração e validações adicionais antes da apresentação de conclusões de negócio.
 
 
 ## Créditos e licença
