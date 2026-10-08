@@ -377,14 +377,15 @@ Para sustentar uma relação causal, seria necessário controlar essas variávei
 
 ## Limitações da análise
 
-O dataset é sintético e apresenta uma estrutura que não permite identificar diferentes cenários ou simulações. Por isso, não foi possível validar de forma confiável a trajetória das métricas `total_*_tournament`.
+O dataset é sintético e apresenta limitações de estrutura e rastreabilidade. As colunas `total_*_tournament`, por exemplo, não se comportam de forma consistente como valores acumulados, e a ausência de uma variável de cenário ou simulação impede validar sua trajetória com segurança.
 
-Também foram identificados registros inconsistentes, como assistências atribuídas a jogadores com zero minutos em campo.
+Também foram encontrados registros inconsistentes, como **30 casos com `minutes_played = 0` e `assists > 0`**. Além disso, métricas como `player_rating` e `expected_goals_xg` já vieram calculadas, mas sem documentação suficiente sobre sua metodologia.
 
-A otimização de memória foi realizada em uma cópia do DataFrame para preservar os tipos originais durante as análises. Em uma pipeline de produção, após validar que as conversões de tipo não alteram os resultados de forma relevante, a versão otimizada poderia ser utilizada nas etapas seguintes.
+Algumas decisões, como o corte mínimo de **90 minutos** e o score de impacto, são critérios analíticos definidos para este case e poderiam ser testados com outros parâmetros.
 
-Em um ambiente de produção, esses pontos seriam esclarecidos com a origem dos dados, as regras de geração e validações adicionais antes da apresentação de conclusões de negócio.
+A otimização de memória foi feita em uma cópia do DataFrame. Em produção, após validar que os tipos reduzidos não alteram os resultados, seria melhor seguir com a versão otimizada.
 
+Por fim, resultados como volumes muito altos de gols por seleção e a forte diferença positiva entre gols e xG reforçam que as conclusões devem ser interpretadas dentro da lógica deste dataset sintético.
 
 ## Créditos e licença
 
